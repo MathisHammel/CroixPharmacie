@@ -1,4 +1,5 @@
 import pygame
+import itertools
 
 PANEL_SIZE = 16 # Size of a single panel on the cross, in pixels
 SCREEN_SIZE = 3 * PANEL_SIZE # Width and height of the cross, in pixels
@@ -42,22 +43,21 @@ class PharmaScreen():
             Values range from 0.0 (off) to 1.0 (brightest).
             Note that 4 sections of the image will be ignored as the screen is a cross.
         '''
-        if len(image) != SCREEN_SIZE or not all(len(row)==SCREEN_SIZE for row in image):
+        if len(image) != SCREEN_SIZE or any(len(row)!=SCREEN_SIZE for row in image):
             raise ValueError(f'Invalid image size (expected {SCREEN_SIZE}x{SCREEN_SIZE})')
 
         self.local_screen.fill((0, 0, 0))
-        for r in range(SCREEN_SIZE):
-            for c in range(SCREEN_SIZE):
-                if not 0.0 <= image[r][c] <= 1.0:
-                    raise ValueError('Pixel values should be between 0.0 and 1.0')
-                
-                if self.is_drawable(r, c):
-                    quantizer = 7 if self.color_scale else 1
-                    quantized_color = round(image[r][c] * quantizer) / quantizer
-                        
-                    led_color = (30, 30 + GREEN_BRIGHTNESS * quantized_color, 30)
-                    center = (PIXEL_SIZE * (c + 0.5), PIXEL_SIZE * (r + 0.5))
-                    pygame.draw.circle(self.local_screen, led_color, center, PIXEL_SIZE * PIXEL_RADIUS_RATIO / 2)
+        for r,c in itertools.product(range(SCREEN_SIZE), repeat=2):
+            if not 0.0 <= image[r][c] <= 1.0:
+                raise ValueError('Pixel values should be between 0.0 and 1.0')
+            
+            if self.is_drawable(r, c):
+                quantizer = 7 if self.color_scale else 1
+                quantized_color = round(image[r][c] * quantizer) / quantizer
+                    
+                led_color = (30, 30 + GREEN_BRIGHTNESS * quantized_color, 30)
+                center = (PIXEL_SIZE * (c + 0.5), PIXEL_SIZE * (r + 0.5))
+                pygame.draw.circle(self.local_screen, led_color, center, PIXEL_SIZE * PIXEL_RADIUS_RATIO / 2)
         
         if self.server_ip is not None:
             # Send the image to the controller
