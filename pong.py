@@ -14,7 +14,7 @@ PADDLE_SIZE = 6
 PADDLE_MOVE_SPEED = 0.9
 INITIAL_BALL_SPEED = 0.6
 N_PLAYERS = 4
-BALL_RADIUS = 2
+BALL_RADIUS = 0.5
 DIAMOND_SIZE = 4
 WALL_OFFSET = 7
 ACCEL_FACTOR = 1.1
@@ -36,12 +36,15 @@ class Paddle:
 
     def to_segment(self):
         return (
-            pygame.Vector2(paddle.c, paddle.r),
             pygame.Vector2(
-                paddle.c + (1 + paddle.size) * int(not paddle.is_vertical),
-                paddle.r + (1 + paddle.size) * int(paddle.is_vertical),
+                paddle.c - BALL_RADIUS * int(not paddle.is_vertical),
+                paddle.r - BALL_RADIUS * int(paddle.is_vertical),
             ),
-        )  # adding 1 to size when doing collision math to account for the ball's radius
+            pygame.Vector2(
+                paddle.c + (BALL_RADIUS + paddle.size) * int(not paddle.is_vertical),
+                paddle.r + (BALL_RADIUS + paddle.size) * int(paddle.is_vertical),
+            ),
+        )  # adding BALL_RADIUS to size when doing collision math to account for the ball's radius
 
 
 @dataclasses.dataclass
@@ -165,25 +168,37 @@ if __name__ == "__main__":
         # LEFT
         if pressed_keys[pygame.K_a] and paddles[0].r > PANEL_SIZE:
             paddles[0].r -= PADDLE_MOVE_SPEED
-        if pressed_keys[pygame.K_q] and paddles[0].r + paddles[0].size < 2 * PANEL_SIZE:
+        if (
+            pressed_keys[pygame.K_q]
+            and paddles[0].r + paddles[0].size < 2 * PANEL_SIZE - 1
+        ):
             paddles[0].r += PADDLE_MOVE_SPEED
 
         # RIGHT
         if pressed_keys[pygame.K_p] and paddles[1].r > PANEL_SIZE:
             paddles[1].r -= PADDLE_MOVE_SPEED
-        if pressed_keys[pygame.K_m] and paddles[1].r + paddles[1].size < 2 * PANEL_SIZE:
+        if (
+            pressed_keys[pygame.K_m]
+            and paddles[1].r + paddles[1].size < 2 * PANEL_SIZE - 1
+        ):
             paddles[1].r += PADDLE_MOVE_SPEED
 
         # TOP
         if pressed_keys[pygame.K_u] and paddles[2].c > PANEL_SIZE:
             paddles[2].c -= PADDLE_MOVE_SPEED
-        if pressed_keys[pygame.K_i] and paddles[2].c + paddles[2].size < 2 * PANEL_SIZE:
+        if (
+            pressed_keys[pygame.K_i]
+            and paddles[2].c + paddles[2].size < 2 * PANEL_SIZE - 1
+        ):
             paddles[2].c += PADDLE_MOVE_SPEED
 
         # BOTTOM
         if pressed_keys[pygame.K_x] and paddles[3].c > PANEL_SIZE:
             paddles[3].c -= PADDLE_MOVE_SPEED
-        if pressed_keys[pygame.K_c] and paddles[3].c + paddles[3].size < 2 * PANEL_SIZE:
+        if (
+            pressed_keys[pygame.K_c]
+            and paddles[3].c + paddles[3].size < 2 * PANEL_SIZE - 1
+        ):
             paddles[3].c += PADDLE_MOVE_SPEED
 
         # Collisions
