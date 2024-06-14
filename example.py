@@ -1,14 +1,15 @@
-import pygame
 import random
 import sys
 
-from pharmacontroller import PharmaScreen, SCREEN_SIZE
+import pygame
 
-if __name__ == '__main__':
+from pharmacontroller import SCREEN_SIZE, PharmaScreen
+
+if __name__ == "__main__":
     pygame.init()
     screen = PharmaScreen()
 
-    image = [[0. for c in range(SCREEN_SIZE)] for r in range(SCREEN_SIZE)]
+    image = [[0.0 for c in range(SCREEN_SIZE)] for r in range(SCREEN_SIZE)]
 
     running = True
     while running:
@@ -19,6 +20,8 @@ if __name__ == '__main__':
 
         # Randomize the values of 10 pixels
         for i in range(10):
-            image[random.randrange(SCREEN_SIZE)][random.randrange(SCREEN_SIZE)] = random.random()
+            image[random.randrange(SCREEN_SIZE)][
+                random.randrange(SCREEN_SIZE)
+            ] = random.random()
 
         screen.set_image(image)

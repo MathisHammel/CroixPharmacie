@@ -1,20 +1,21 @@
+import sys
+
 import cv2
 import pygame
-import sys
-import tempfile
 
-from pharmacontroller import PharmaScreen, SCREEN_SIZE
+from pharmacontroller import SCREEN_SIZE, PharmaScreen
 
-VIDEO_FILE = 'videoExample.mp4'
+VIDEO_FILE = "videoExample.mp4"
 FORCED_FRAMERATE = None
 INVERT_COLORS = False
 PLAY_AUDIO = True
 
+
 def frame_to_image(frame, invert_colors=False):
-    '''
-        Converts a frame from a video file to a 2D array of floats representing the pixel values.
-        This assumes that the video is in landscape mode.
-    '''
+    """
+    Converts a frame from a video file to a 2D array of floats representing the pixel values.
+    This assumes that the video is in landscape mode.
+    """
     grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # Scale the image to fit SCREEN_SIZE in height
@@ -24,7 +25,7 @@ def frame_to_image(frame, invert_colors=False):
 
     # Crop the image to SCREEN_SIZE in width
     start_col = (scaled_width - SCREEN_SIZE) // 2
-    cropped_frame = scaled_frame[:, start_col:start_col + SCREEN_SIZE]
+    cropped_frame = scaled_frame[:, start_col : start_col + SCREEN_SIZE]
 
     # Normalize the pixel values to the [0.0, 1.0] range and (row, column) order
     normalized_frame = cropped_frame / 255.0
@@ -34,22 +35,24 @@ def frame_to_image(frame, invert_colors=False):
 
     return normalized_frame
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     cap = cv2.VideoCapture(VIDEO_FILE)
     if not cap.isOpened():
-        print(f'Error: cannot open video file {VIDEO_FILE}')
+        print(f"Error: cannot open video file {VIDEO_FILE}")
         sys.exit()
 
     if PLAY_AUDIO:
         from moviepy.editor import VideoFileClip
+
         vclip = VideoFileClip(VIDEO_FILE)
-        vclip.audio.write_audiofile('temp_audio.mp3')
+        vclip.audio.write_audiofile("temp_audio.mp3")
 
     pygame.init()
     screen = PharmaScreen()
-    
+
     if PLAY_AUDIO:
-        pygame.mixer.music.load('temp_audio.mp3')
+        pygame.mixer.music.load("temp_audio.mp3")
         pygame.mixer.music.play()
 
     if FORCED_FRAMERATE is not None:
@@ -59,7 +62,7 @@ if __name__ == '__main__':
 
     ms_per_frame = 1000 / fps
 
-    print(f'Playing video at {fps} FPS (frame duration: {ms_per_frame} ms)')
+    print(f"Playing video at {fps} FPS (frame duration: {ms_per_frame} ms)")
 
     running = True
     frame_counter = 0
@@ -68,7 +71,7 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        
+
         curr_time = pygame.time.get_ticks()
 
         if frame_counter == 0 and PLAY_AUDIO:
@@ -82,16 +85,14 @@ if __name__ == '__main__':
             ret, frame = cap.read()
             frame_counter += 1
             if not ret:
-                print('End of video file')
+                print("End of video file")
                 pygame.quit()
                 sys.exit()
-                
+
         if frame_counter != frame_ctr_before + 1:
-            print(f'Frame desync: {frame_ctr_before} -> {frame_counter}')
-        
+            print(f"Frame desync: {frame_ctr_before} -> {frame_counter}")
+
         image = frame_to_image(frame, invert_colors=INVERT_COLORS)
         screen.set_image(image)
 
 pygame.quit()
-
-        
