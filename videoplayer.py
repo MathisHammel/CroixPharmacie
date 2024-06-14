@@ -1,7 +1,6 @@
 import cv2
 import pygame
 import sys
-import tempfile
 
 from pharmacontroller import PharmaScreen, SCREEN_SIZE
 
