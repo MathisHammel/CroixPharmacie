@@ -25,7 +25,7 @@ class PharmaScreen():
         self.fps = FPS_8COLOR if color_scale else FPS_2COLOR
         self.font = pygame.font.SysFont(None, 24)
 
-    def is_drawable(self, row, col):
+    def is_drawable(self, row: int, col:int) -> bool:
         '''
             Returns whether the given coordinates match an actual LED on the screen.
         '''
@@ -35,7 +35,7 @@ class PharmaScreen():
         panel_coords = (row//PANEL_SIZE, col//PANEL_SIZE) # Locate the target on the 3x3 grid of panels
         return panel_coords in ((0, 1), (1, 0), (1, 1), (1, 2), (2, 1))
         
-    def set_image(self, image):
+    def set_image(self, image: list[list[float]]):
         '''
             Sets the image to be displayed.
             
