@@ -34,7 +34,7 @@ class PharmaScreen():
 
         panel_coords = (row//PANEL_SIZE, col//PANEL_SIZE) # Locate the target on the 3x3 grid of panels
         return panel_coords in ((0, 1), (1, 0), (1, 1), (1, 2), (2, 1))
-        
+
     def set_image(self, image: list[list[float]]):
         '''
             Sets the image to be displayed.
@@ -58,11 +58,11 @@ class PharmaScreen():
                 led_color = (30, 30 + GREEN_BRIGHTNESS * quantized_color, 30)
                 center = (PIXEL_SIZE * (c + 0.5), PIXEL_SIZE * (r + 0.5))
                 pygame.draw.circle(self.local_screen, led_color, center, PIXEL_SIZE * PIXEL_RADIUS_RATIO / 2)
-        
+
         if self.server_ip is not None:
             # Send the image to the controller
             raise NotImplementedError('Remote control is not yet implemented')
-        
+
         current_fps = self.clock.get_fps()
         fps_img = self.font.render(f'FPS: {current_fps:.1f}', True, (0, 100, 0))
         self.local_screen.blit(fps_img, (0, 0))

@@ -17,8 +17,8 @@ if __name__ == '__main__':
                 pygame.quit()
                 sys.exit()
 
-        # Randomize the values of 10 pixels
-        for i in range(10):
-            image[random.randrange(SCREEN_SIZE)][random.randrange(SCREEN_SIZE)] = random.random()
+    # Randomize the values of 10 pixels
+    for i in range(10):
+        image[random.randrange(SCREEN_SIZE)][random.randrange(SCREEN_SIZE)] = random.random()
 
-        screen.set_image(image)
+    screen.set_image(image)

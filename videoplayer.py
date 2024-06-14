@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     pygame.init()
     screen = PharmaScreen()
-    
+
     if PLAY_AUDIO:
         pygame.mixer.music.load('temp_audio.mp3')
         pygame.mixer.music.play()
@@ -68,7 +68,7 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        
+
         curr_time = pygame.time.get_ticks()
 
         if frame_counter == 0 and PLAY_AUDIO:
@@ -85,13 +85,11 @@ if __name__ == '__main__':
                 print('End of video file')
                 pygame.quit()
                 sys.exit()
-                
+
         if frame_counter != frame_ctr_before + 1:
             print(f'Frame desync: {frame_ctr_before} -> {frame_counter}')
-        
+
         image = frame_to_image(frame, invert_colors=INVERT_COLORS)
         screen.set_image(image)
 
 pygame.quit()
-
-        

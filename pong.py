@@ -84,7 +84,7 @@ def init_random_ball():
             random.randrange(PANEL_SIZE, 2 * PANEL_SIZE)
         )
     return (ballpos, ballv, BALL_RADIUS)
-    
+
 if __name__ == '__main__':
     pygame.init()
     screen = PharmaScreen(True)
