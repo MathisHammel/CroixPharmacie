@@ -5,7 +5,7 @@ from enum import Enum
 import pygame
 
 from pharmacontroller import SCREEN_SIZE, PharmaScreen
-from writter import String
+from textwriter import String
 
 class Direction(Enum):
     NORTH = 0
