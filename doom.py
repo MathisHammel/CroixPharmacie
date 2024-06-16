@@ -25,6 +25,7 @@ from pharmacontroller import PharmaScreen
 
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 400
+DEBUGGER = True
 
 keymap = {
     pygame.K_LEFT: cdg.Keys.LEFTARROW,
@@ -40,7 +41,14 @@ keymap = {
     pygame.K_ESCAPE: cdg.Keys.ESCAPE,
 }
 
-def draw_frame(screen, pixels) -> None:
+def draw_frame(screen, pixels, debug_figax) -> None:
+    if DEBUGGER:
+        fig, ax = debug_figax
+        ax.clear()
+        ax.imshow(pixels[:,:,[2,1,0]])
+        fig.canvas.draw()
+        fig.canvas.flush_events()
+
     # Resize pixels to a 48x77 array with interpolation
     pixels = cv2.resize(pixels, (77, 48), interpolation=cv2.INTER_CUBIC)
 
@@ -70,8 +78,18 @@ def get_key():
 if __name__ == '__main__':
     pygame.init()
     screen = PharmaScreen()
+
+    if DEBUGGER:
+        import matplotlib.pyplot as plt
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+        debug_figax = (fig, ax)
+        fig.show()
+    else:
+        debug_figax = None
+
     cdg.init(SCREEN_WIDTH,
         SCREEN_HEIGHT,
-        lambda pixels: draw_frame(screen, pixels),
+        lambda pixels: draw_frame(screen, pixels, debug_figax),
         get_key)
     cdg.main()

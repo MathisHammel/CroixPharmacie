@@ -40,4 +40,4 @@ cd cydoomgeneric/cydoomgeneric
 python setup.py install
 ```
 
-Vous pouvez maintenant lancer doom.py pour le voir sur la croix de pharmacie ! (Astuce : le jeu est difficilement lisible avec la faible résolution de l'écran, appuyez 4 fois sur entrée pour lancer une partie.)
+Vous pouvez maintenant exécuter doom.py pour le lancer sur la croix de pharmacie ! Utilisez les flèches pour vous déplacer, Ctrl gauche pour tirer, et la barre espace pour ouvrir les portes.
