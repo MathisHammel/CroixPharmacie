@@ -14,28 +14,28 @@ class Direction(Enum):
     WEST  = 3
 
 class Snake:
-    def __init__(self, speed, lenght, image):
+    def __init__(self, speed, length, image):
         
         self.APPLE_BRIGHTNESS = 0.4
         self.SNAKE_BRIGHTNESS = 1.
-        self.MAX_LENGHT = (16**2) * 5
+        self.MAX_LENGTH = (16**2) * 5
 
         self.heading = Direction.SOUTH
         self.speed = speed
-        assert 2 <= lenght <= 10, "start lenght must be between 2 and 10"
-        self.lenght = lenght
+        assert 2 <= length <= 10, "start length must be between 2 and 10"
+        self.length = length
         self.image = image
 
         self.time = time.time()
 
         self.starting_cell = (16, 0)
-        self.tail = [None] * self.lenght
-        for i in range(self.lenght):
-            self.tail[i] = (16, self.lenght - 1 - i)
+        self.tail = [None] * self.length
+        for i in range(self.length):
+            self.tail[i] = (16, self.length - 1 - i)
 
         self.apple = (23, 23)
-        self.winned = False
-        self.loosed = False
+        self.has_won = False
+        self.has_lost = False
 
         # Avoid 2 inputs in the same frame
         self.heading_changed_in_frame = False
@@ -56,12 +56,12 @@ class Snake:
 
             # Wall collision
             if not PharmaScreen.is_drawable(None, new_head[0], new_head[1]) or new_head in self.tail[1:]:
-                self.loosed = True
+                self.has_lost = True
                 return False
 
             self.tail.insert(0, new_head)
-            if len(self.tail) == self.MAX_LENGHT:
-                self.winned = True
+            if len(self.tail) == self.MAX_LENGTH:
+                self.has_won = True
             apple_eaten = self.update_apple()
             if not apple_eaten:
                 del self.tail[-1]
@@ -101,7 +101,7 @@ class Snake:
         return False
     
     def draw(self):
-        if self.loosed or self.winned: return
+        if self.has_lost or self.has_won: return
         for cell in self.tail:
             self.image[cell[1]][cell[0]] = self.SNAKE_BRIGHTNESS
         self.image[self.apple[1]][self.apple[0]] = self.APPLE_BRIGHTNESS
@@ -130,9 +130,9 @@ if __name__ == "__main__":
         
 
         clear(image)
-        if snake.loosed:
+        if snake.has_lost:
             loosing_string.scroll()
-        elif snake.winned:
+        elif snake.has_won:
             # Color for the middle line of the cross 
             for line in image[16:32]:
                 for i in range(len(line)):
