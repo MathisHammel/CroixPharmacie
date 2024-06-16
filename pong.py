@@ -34,6 +34,76 @@ class Paddle:
     is_vertical: bool
     size: int
 
+    def to_segment(self):
+        return (
+            pygame.Vector2(
+                paddle.c - BALL_RADIUS * int(not paddle.is_vertical),
+                paddle.r - BALL_RADIUS * int(paddle.is_vertical),
+            ),
+            pygame.Vector2(
+                paddle.c + (BALL_RADIUS + paddle.size) * int(not paddle.is_vertical),
+                paddle.r + (BALL_RADIUS + paddle.size) * int(paddle.is_vertical),
+            ),
+        )  # adding BALL_RADIUS to size when doing collision math to account for the ball's radius
+
+
+@dataclasses.dataclass
+class Ball:
+    pos: pygame.Vector2
+    v: pygame.Vector2
+    rad: float
+
+    @classmethod
+    def init_random_ball(cls):
+        vx = random.random() + 0.5 * (1 - 2 * random.getrandbits(1))
+        vy = random.random() + 0.5 * (1 - 2 * random.getrandbits(1))
+        ballv = pygame.Vector2(vx, vy).normalize() * INITIAL_BALL_SPEED
+
+        ballpos = pygame.Vector2(
+            random.randrange(PANEL_SIZE, 2 * PANEL_SIZE),
+            random.randrange(PANEL_SIZE, 2 * PANEL_SIZE),
+        )
+
+        while (
+            abs(ballpos.x - (SCREEN_SIZE - 1) / 2)
+            + abs(ballpos.y - (SCREEN_SIZE - 1) / 2)
+        ) < DIAMOND_SIZE + 0.01:
+            ballpos = pygame.Vector2(
+                random.randrange(PANEL_SIZE, 2 * PANEL_SIZE),
+                random.randrange(PANEL_SIZE, 2 * PANEL_SIZE),
+            )
+        return Ball(ballpos, ballv, BALL_RADIUS)
+
+    def collide_ball_segment(
+        self,
+        segment: tuple[pygame.Vector2, pygame.Vector2],
+        perturb_if_collide=0.0,
+        accel_if_collide=1.0,
+        dt=1.0,
+    ):
+        sp1, sp2 = segment
+
+        pertx = random.random() - 0.5
+        perty = random.random() - 0.5
+
+        perturb = (
+            pygame.Vector2(pertx, perty).normalize()
+            * self.v.magnitude()
+            * perturb_if_collide
+        )
+
+        """
+        for pt in (sp1, sp2):
+            if self.pos.distance_to(pt) < self.rad:
+                corner2ball = self.pos - pt
+                newv = corner2self.normalize() * self.v.magnitude()
+                return Ball(self.pos, newv * accel_if_collide + perturb, self.rad)
+        """
+
+        if seg_intersect(sp1, sp2, self.pos, self.pos + self.v * dt):
+            seg_normal = (sp2 - sp1).rotate(90)
+            self.v = self.v.reflect(seg_normal) * accel_if_collide + perturb
+
 
 def ccw(A, B, C):
     return (C.y - A.y) * (B.x - A.x) > (B.y - A.y) * (C.x - A.x)
@@ -42,67 +112,6 @@ def ccw(A, B, C):
 # Return true if line segments AB and CD intersect
 def seg_intersect(A, B, C, D):
     return ccw(A, C, D) != ccw(B, C, D) and ccw(A, B, C) != ccw(A, B, D)
-
-
-def collide_ball_segment(
-    ball, segment, perturb_if_collide=0.0, accel_if_collide=1.0, dt=1.0
-):
-    ballpos, ballv, ballrad = ball
-    sp1, sp2 = segment
-
-    pertx = random.random() - 0.5
-    perty = random.random() - 0.5
-
-    perturb = (
-        pygame.Vector2(pertx, perty).normalize()
-        * ballv.magnitude()
-        * perturb_if_collide
-    )
-
-    """
-    for pt in (sp1, sp2):
-        if ballpos.distance_to(pt) < ballrad:
-            corner2ball = ballpos - pt
-            newv = corner2ball.normalize() * ballv.magnitude()
-            return (ballpos, newv * accel_if_collide + perturb, ballrad)
-    """
-
-    if seg_intersect(sp1, sp2, ballpos, ballpos + ballv * dt):
-        seg_normal = (sp2 - sp1).rotate(90)
-        newv = ballv.reflect(seg_normal)
-        return (ballpos, newv * accel_if_collide + perturb, ballrad)
-
-    return ball
-
-
-def paddle_to_seg(paddle: Paddle):
-    return (
-        pygame.Vector2(paddle.c, paddle.r),
-        pygame.Vector2(
-            paddle.c + paddle.size * int(not paddle.is_vertical),
-            paddle.r + paddle.size * int(paddle.is_vertical),
-        ),
-    )
-
-
-def init_random_ball():
-    vx = random.random() + 0.5 * (1 - 2 * random.getrandbits(1))
-    vy = random.random() + 0.5 * (1 - 2 * random.getrandbits(1))
-    ballv = pygame.Vector2(vx, vy).normalize() * INITIAL_BALL_SPEED
-
-    ballpos = pygame.Vector2(
-        random.randrange(PANEL_SIZE, 2 * PANEL_SIZE),
-        random.randrange(PANEL_SIZE, 2 * PANEL_SIZE),
-    )
-
-    while (
-        abs(ballpos.x - (SCREEN_SIZE - 1) / 2) + abs(ballpos.y - (SCREEN_SIZE - 1) / 2)
-    ) < DIAMOND_SIZE + 0.01:
-        ballpos = pygame.Vector2(
-            random.randrange(PANEL_SIZE, 2 * PANEL_SIZE),
-            random.randrange(PANEL_SIZE, 2 * PANEL_SIZE),
-        )
-    return (ballpos, ballv, BALL_RADIUS)
 
 
 if __name__ == "__main__":
@@ -122,7 +131,7 @@ if __name__ == "__main__":
             r, c, is_vertical, dr, dc = PADDLE_POSITIONS[i]
         paddles.append(Paddle(r + dr, c + dc, is_vertical, paddle_size))
 
-    ball = init_random_ball()
+    ball = Ball.init_random_ball()
 
     walls = [
         (
@@ -159,51 +168,59 @@ if __name__ == "__main__":
         # LEFT
         if pressed_keys[pygame.K_a] and paddles[0].r > PANEL_SIZE:
             paddles[0].r -= PADDLE_MOVE_SPEED
-        if pressed_keys[pygame.K_q] and paddles[0].r + paddles[0].size < 2 * PANEL_SIZE:
+        if (
+            pressed_keys[pygame.K_q]
+            and paddles[0].r + paddles[0].size < 2 * PANEL_SIZE - 1
+        ):
             paddles[0].r += PADDLE_MOVE_SPEED
 
         # RIGHT
         if pressed_keys[pygame.K_p] and paddles[1].r > PANEL_SIZE:
             paddles[1].r -= PADDLE_MOVE_SPEED
-        if pressed_keys[pygame.K_m] and paddles[1].r + paddles[1].size < 2 * PANEL_SIZE:
+        if (
+            pressed_keys[pygame.K_m]
+            and paddles[1].r + paddles[1].size < 2 * PANEL_SIZE - 1
+        ):
             paddles[1].r += PADDLE_MOVE_SPEED
 
         # TOP
         if pressed_keys[pygame.K_u] and paddles[2].c > PANEL_SIZE:
             paddles[2].c -= PADDLE_MOVE_SPEED
-        if pressed_keys[pygame.K_i] and paddles[2].c + paddles[2].size < 2 * PANEL_SIZE:
+        if (
+            pressed_keys[pygame.K_i]
+            and paddles[2].c + paddles[2].size < 2 * PANEL_SIZE - 1
+        ):
             paddles[2].c += PADDLE_MOVE_SPEED
 
         # BOTTOM
         if pressed_keys[pygame.K_x] and paddles[3].c > PANEL_SIZE:
             paddles[3].c -= PADDLE_MOVE_SPEED
-        if pressed_keys[pygame.K_c] and paddles[3].c + paddles[3].size < 2 * PANEL_SIZE:
+        if (
+            pressed_keys[pygame.K_c]
+            and paddles[3].c + paddles[3].size < 2 * PANEL_SIZE - 1
+        ):
             paddles[3].c += PADDLE_MOVE_SPEED
 
         # Collisions
         for wall in walls:
-            ball = collide_ball_segment(ball, wall)
+            ball.collide_ball_segment(wall)
 
         for paddle in paddles:
-            ball = collide_ball_segment(
-                ball,
-                paddle_to_seg(paddle),
+            ball.collide_ball_segment(
+                paddle.to_segment(),
                 perturb_if_collide=0.01,
                 accel_if_collide=ACCEL_FACTOR,
             )
 
-        ballpos, ballv, ballrad = ball
-        ballpos += ballv
-        ball = (ballpos, ballv, ballrad)
+        ball.pos += ball.v
 
         if (
-            ballpos.x < 0
-            or ballpos.y < 0
-            or ballpos.x > 3 * PANEL_SIZE - 1
-            or ballpos.y > 3 * PANEL_SIZE - 1
+            ball.pos.x < 0
+            or ball.pos.y < 0
+            or ball.pos.x > 3 * PANEL_SIZE - 1
+            or ball.pos.y > 3 * PANEL_SIZE - 1
         ):
-            ball = init_random_ball()
-            ballpos, ballv, ballrad = ball
+            ball = Ball.init_random_ball()
 
         image = [[0.0 for c in range(SCREEN_SIZE)] for r in range(SCREEN_SIZE)]
 
@@ -212,11 +229,11 @@ if __name__ == "__main__":
             for i in range(paddle.size):
                 image[round(paddle.r) + dr * i][round(paddle.c) + dc * i] = 1.0
 
-        base_x = int(ballpos.x)
-        base_y = int(ballpos.y)
+        base_x = int(ball.pos.x)
+        base_y = int(ball.pos.y)
         for dx in (0, 1):
             for dy in (0, 1):
-                dst = math.dist((ballpos.x, ballpos.y), (base_x + dx, base_y + dy))
+                dst = math.dist((ball.pos.x, ball.pos.y), (base_x + dx, base_y + dy))
                 # dst = 0 : max
                 # dst = 1.4 : min
                 val = 1.5 - dst
