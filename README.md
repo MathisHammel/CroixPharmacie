@@ -2,7 +2,7 @@
 
 Ce projet permet de contrôler à distance l'affichage d'une croix de pharmacie. Si vous n'avez pas la chance de posséder une croix de pharmacie chez vous, le code vous permet également de simuler l'affichage localement.
 
-![Chute de sable sur une croix de pharmacie](Sandfall.webm)
+![Chute de sable sur une croix de pharmacie](Sandfall.gif)
 
 ## Comment contribuer ?
 
