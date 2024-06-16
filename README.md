@@ -20,7 +20,7 @@ Pour des raisons matérielles, la croix gère deux modes de couleur :
 - Affichage d'une vidéo avec le son - [videoplayer.py](videoplayer.py)
 - Jeu pong imaginé par [le_egar](https://twitter.com/le_egar/status/1517539004627001346), avec 4 joueurs - [pong.py](pong.py)
 - Simulation de chute de sable - [falling_sand_simulation.py](falling_sand_simulation.py)
-- Doom - en cours d'implémentation
+- Doom (voir instructions ci-dessous) - [doom.py](doom.py)
 
 Pour installer les dépendances Python, exécutez la commande `pip install -r requirements.txt`
 
@@ -29,3 +29,15 @@ Pour installer les dépendances Python, exécutez la commande `pip install -r re
 Les pull requests sont les bienvenues sur ce dépôt ! Et si vous envoyez votre code d'ici la fin du mois (juin 2024), vous aurez potentiellement la chance de le voir être exécuté sur une vraie croix de pharmacie 😉
 
 Pour soumettre une idée si vous n'êtes pas en mesure de coder, n'hésitez pas à créer [une issue GitHub](https://github.com/MathisHammel/CroixPharmacie/issues), ou m'envoyer des propositions en [DM sur Twitter](https://twitter.com/MathisHammel).
+
+## Comment exécuter Doom ?
+
+L'exécution du module Doom est dépendante de cyDoomGeneric, un wrapper de DoomGeneric. L'installation se fait en plusieurs étapes :
+
+```bash
+git clone https://github.com/wojciech-graj/cydoomgeneric`
+cd cydoomgeneric/cydoomgeneric
+python setup.py install
+```
+
+Vous pouvez maintenant lancer doom.py pour le voir sur la croix de pharmacie ! (Astuce : le jeu est difficilement lisible avec la faible résolution de l'écran, appuyez 4 fois sur entrée pour lancer une partie.)
