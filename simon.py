@@ -48,8 +48,6 @@ def main():
     pygame.mixer.init()
     screen = PharmaScreen()
 
-    print("Press 1 for square, 2 for circle, 3 for triangle, 4 for xlogo")
-
     # Paramètres
     shape_functions = {
         'square': draw_square,
@@ -72,10 +70,10 @@ def main():
     }
 
     key_map = {
-        pygame.K_1: ('square', 'square'),
-        pygame.K_2: ('circle', 'circle'),
-        pygame.K_3: ('triangle', 'triangle'),
-        pygame.K_4: ('xlogo', 'xlogo')
+        pygame.K_LEFT: ('square', 'square'),
+        pygame.K_RIGHT: ('circle', 'circle'),
+        pygame.K_UP: ('triangle', 'triangle'),
+        pygame.K_DOWN: ('xlogo', 'xlogo')
     }
 
     running = True
