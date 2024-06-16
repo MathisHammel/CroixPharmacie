@@ -19,8 +19,11 @@ Pour des raisons matérielles, la croix gère deux modes de couleur :
 - Exemple - [example.py](example.py)
 - Affichage d'une vidéo avec le son - [videoplayer.py](videoplayer.py)
 - Jeu pong imaginé par [le_egar](https://twitter.com/le_egar/status/1517539004627001346), avec 4 joueurs - [pong.py](pong.py)
-- Simulation de chute de sable - [falling_sand_simulation.py](falling_sand_simulation.py)
 - Doom (voir instructions ci-dessous) - [doom.py](doom.py)
+- Simulation de chute de sable - [falling_sand_simulation.py](falling_sand_simulation.py)
+- Simon says - [simon.py](simon.py)
+- Snake - [snake.py](snake.py)
+- Affichage de texte - [textwriter.py](textwriter.py)
 
 Pour installer les dépendances Python, exécutez la commande `pip install -r requirements.txt`
 
