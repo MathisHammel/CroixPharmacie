@@ -25,6 +25,7 @@ Pour des raisons matérielles, la croix gère deux modes de couleur :
 - Simulation de chute de sable - [falling_sand_simulation.py](falling_sand_simulation.py)
 - Simon says - [simon.py](simon.py)
 - Snake - [snake.py](snake.py)
+- Animation d'un cube rotatif - [cube.py](cube.py)
 - Affichage de texte - [textwriter.py](textwriter.py)
 
 Pour installer les dépendances Python, exécutez la commande `pip install -r requirements.txt`
