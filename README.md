@@ -40,7 +40,7 @@ Pour soumettre une idée si vous n'êtes pas en mesure de coder, n'hésitez pas 
 L'exécution du module Doom est dépendante de cyDoomGeneric, un wrapper de DoomGeneric. L'installation se fait en plusieurs étapes :
 
 ```bash
-git clone https://github.com/wojciech-graj/cydoomgeneric`
+git clone https://github.com/wojciech-graj/cydoomgeneric
 cd cydoomgeneric/cydoomgeneric
 python setup.py install
 ```
