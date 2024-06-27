@@ -37,7 +37,7 @@ def draw_techno_sign(screen, spectrum):
         end_idx = min(start_idx + point_width, num_bins)
         mean_amplitude = np.mean(spectrum[start_idx:end_idx])
         
-        wave_height = int(mean_amplitude * SCREEN_SIZE / 3)  # Adjust amplitude to fit screen
+        wave_height = int(mean_amplitude * SCREEN_SIZE /2)  # Adjust amplitude to fit screen
 
         for y_offset in range(-wave_height, wave_height):
             y = SCREEN_SIZE // 2 + y_offset
