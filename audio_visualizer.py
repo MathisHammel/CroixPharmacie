@@ -43,7 +43,7 @@ if __name__ == "__main__":
     pygame.mixer.init()
 
     # Charger et analyser le fichier audio
-    file_path = "Rave_Teacher.mp3"
+    file_path = "techno_pharma.mp3"
 
     # Charger le fichier audio avec pygame.mixer pour le jouer
     pygame.mixer.music.load(file_path)
