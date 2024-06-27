@@ -1,4 +1,3 @@
-import random
 import sys
 import numpy as np
 import pygame
@@ -6,52 +5,59 @@ from pydub import AudioSegment
 from pydub.utils import which
 from pharmacontroller import SCREEN_SIZE, PharmaScreen
 
-# Configurer pydub pour utiliser ffmpeg
+# Configure pydub to use ffmpeg
 AudioSegment.converter = which("ffmpeg")
 
+# Function to load audio data
 def get_audio_data(file_path):
-    # Charger le fichier audio en utilisant pydub
     audio = AudioSegment.from_file(file_path)
-    # Convertir l'audio en échantillons de données brutes (tableau numpy)
     samples = np.array(audio.get_array_of_samples())
     return samples, audio.frame_rate
 
+# Function to compute amplitude spectrum using FFT
 def get_amplitude_spectrum(data):
-    # Transformer les données audio en un spectre d'amplitude
     fft_result = np.fft.fft(data)
     amplitude_spectrum = np.abs(fft_result)
-    return amplitude_spectrum[:len(amplitude_spectrum)//2]  # Utiliser seulement la première moitié
+    return amplitude_spectrum[:len(amplitude_spectrum)//2]
 
-def draw_waves(screen, spectrum):
-    # Créer une image pour afficher le spectre
+# Function to draw techno sign as a wave based on amplitude spectrum
+def draw_techno_sign(screen, spectrum):
     image = [[0.0 for _ in range(SCREEN_SIZE)] for _ in range(SCREEN_SIZE)]
     
     max_amplitude = np.max(spectrum)
-    for i in range(min(len(spectrum), SCREEN_SIZE)):
-        amplitude = spectrum[i] / max_amplitude
-        height = int(amplitude * SCREEN_SIZE)
-        for j in range(height):
-            image[SCREEN_SIZE - 1 - j][i] = 1.0  # Dessiner une barre verticale selon l'amplitude
+    num_bins = len(spectrum)
+    num_points = SCREEN_SIZE * 2  # Increase the number of points for wider shape
+    
+    point_width = max(1, num_bins // num_points)
+
+    spectrum /= max_amplitude
+    
+    for point in range(num_points):
+        start_idx = point * point_width
+        end_idx = min(start_idx + point_width, num_bins)
+        mean_amplitude = np.mean(spectrum[start_idx:end_idx])
+        
+        wave_height = int(mean_amplitude * SCREEN_SIZE / 3)  # Adjust amplitude to fit screen
+
+        for y_offset in range(-wave_height, wave_height):
+            y = SCREEN_SIZE // 2 + y_offset
+            x = point
+            if 0 <= y < SCREEN_SIZE and 0 <= x < SCREEN_SIZE:
+                image[y][x] = 1.0
 
     screen.set_image(image)
 
+# Main function
 if __name__ == "__main__":
     pygame.init()
     screen = PharmaScreen()
 
-    # Initialiser le mixer de pygame pour jouer la musique
     pygame.mixer.init()
 
-    # Charger et analyser le fichier audio
-    file_path = "techno_pharma.mp3"
-
-    # Charger le fichier audio avec pygame.mixer pour le jouer
+    file_path = "music.mp3"  # Replace with your audio file path
     pygame.mixer.music.load(file_path)
-
-    # Démarrer la lecture de la musique
     pygame.mixer.music.play()
 
-    # Obtenir les échantillons audio pour la visualisation
     audio_data, sample_rate = get_audio_data(file_path)
 
     chunk_size = 1024
@@ -67,9 +73,12 @@ if __name__ == "__main__":
         if start + chunk_size < len(audio_data):
             chunk = audio_data[start:start + chunk_size]
             amplitude_spectrum = get_amplitude_spectrum(chunk)
-            draw_waves(screen, amplitude_spectrum)
+            draw_techno_sign(screen, amplitude_spectrum)
             start += chunk_size
         else:
-            running = False  # Arrêter une fois que toute la musique a été traitée
+            running = False
 
-        pygame.time.wait(50)  # Attendre un peu pour synchroniser avec la lecture audio
+        pygame.time.wait(30)
+        pygame.display.flip()
+
+    pygame.quit()
