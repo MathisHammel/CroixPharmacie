@@ -37,8 +37,8 @@ if __name__ == "__main__":
         t=t+1
         for i in range(size):
             for j in range(size):
-                x= i * np.cos(t/10) - j * np.sin(t/10) / (np.sin(t/20)*5)
-                y= j * np.cos(t/10) + i * np.sin(t/10) / (np.sin(t/20)*5)
+                x= ( i * np.cos(t/10) - j * np.sin(t/10)) / ((np.sin(t/20)*3)+4)
+                y= ( j * np.cos(t/10) + i * np.sin(t/10)) / ((np.sin(t/20)*3)+4)
                 matrix[i][j] = hzv[int(x)%8][int(y)%9]
 
         screen.set_image(matrix.tolist())
