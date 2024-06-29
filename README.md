@@ -28,6 +28,9 @@ Pour des raisons matérielles, la croix gère deux modes de couleur :
 - Animation d'un cube rotatif - [cube.py](cube.py)
 - Affichage de texte - [textwriter.py](textwriter.py)
 - Effets visuels - [visual_effects.py](visual_effects.py)
+- Spirale hypnotique - [youreundercontrol.py](youreundercontrol.py)
+- Plasma - [plasma.py](plasma.py)
+- Rotozoom - [rotozoom.py](rotozoom.py)
 
 Pour installer les dépendances Python, exécutez la commande `pip install -r requirements.txt`
 
