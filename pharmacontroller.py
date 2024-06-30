@@ -1,5 +1,5 @@
 import itertools
-
+from typing import List
 import pygame
 
 PANEL_SIZE = 16  # Size of a single panel on the cross, in pixels
@@ -44,7 +44,7 @@ class PharmaScreen:
         )  # Locate the target on the 3x3 grid of panels
         return panel_coords in ((0, 1), (1, 0), (1, 1), (1, 2), (2, 1))
 
-    def set_image(self, image: list[list[float]]):
+    def set_image(self, image: List[List[float]]):
         """
         Sets the image to be displayed.
 
