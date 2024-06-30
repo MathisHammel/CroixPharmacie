@@ -29,6 +29,7 @@ Pour des raisons matérielles, la croix gère deux modes de couleur :
 - Affichage de texte - [textwriter.py](textwriter.py)
 - Effets visuels - [visual_effects.py](visual_effects.py)
 - Spirale hypnotique - [youreundercontrol.py](youreundercontrol.py)
+- Plasma - [plasma.py](plasma.py)
 
 Pour installer les dépendances Python, exécutez la commande `pip install -r requirements.txt`
 
