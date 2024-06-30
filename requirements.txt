@@ -2,3 +2,4 @@ pygame>=2.5.2
 opencv-python>=4.9
 moviepy>=1.0.3
 matplotlib>=3.7
+pydub>=0.25.1
