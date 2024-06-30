@@ -5,6 +5,7 @@ import itertools
 import math
 import random
 import sys
+from typing import Tuple,List
 
 import pygame
 
@@ -76,7 +77,7 @@ class Ball:
 
     def collide_ball_segment(
         self,
-        segment: tuple[pygame.Vector2, pygame.Vector2],
+        segment: Tuple[pygame.Vector2, pygame.Vector2],
         perturb_if_collide=0.0,
         accel_if_collide=1.0,
         dt=1.0,
@@ -118,7 +119,7 @@ if __name__ == "__main__":
     pygame.init()
     screen = PharmaScreen(True)
 
-    paddles: list[Paddle] = []
+    paddles: List[Paddle] = []
     for i in range(4):
         if i < N_PLAYERS:
             # Human player
