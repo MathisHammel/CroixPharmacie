@@ -1,6 +1,8 @@
 import itertools
+import json
 from typing import List
 import pygame
+import socket
 
 PANEL_SIZE = 16  # Size of a single panel on the cross, in pixels
 SCREEN_SIZE = 3 * PANEL_SIZE  # Width and height of the cross, in pixels
@@ -9,10 +11,11 @@ PIXEL_RADIUS_RATIO = 0.5  # Relative diameter of each LED
 FPS_2COLOR = 60
 FPS_8COLOR = 20
 GREEN_BRIGHTNESS = 180  # Brightness (0-255) of the brightest green
+COLOR_DEPTH = 3  # Number of bits in each shade of green
 
 
 class PharmaScreen:
-    def __init__(self, color_scale=True, server_ip=None):
+    def __init__(self, color_scale=True, server_ip='192.168.10.10'):
         """
         An object representing the pharmacy cross screen for local simulation and remote control of the actual cross.
         Args:
@@ -20,6 +23,11 @@ class PharmaScreen:
             - `server_ip` is the address of the controller where update packets should be transmitted. If None, the screen is only simulated locally.
         """
         self.server_ip = server_ip
+        if server_ip is not None:
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            #self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            #self.socket.connect(('192.168.1.107', 1337))
+            #print('Socket connected')
         self.color_scale = color_scale
         self.local_screen = pygame.display.set_mode(
             [PIXEL_SIZE * SCREEN_SIZE, PIXEL_SIZE * SCREEN_SIZE]
@@ -76,8 +84,14 @@ class PharmaScreen:
                 )
 
         if self.server_ip is not None:
-            # Send the image to the controller
-            raise NotImplementedError("Remote control is not yet implemented")
+            # Range 0.0-1.0 to 0-2^N-1
+            quantized_frame = [[round(pix * (2 ** COLOR_DEPTH - 1)) for pix in row] for row in image]
+            frameenc = json.dumps(quantized_frame).encode()
+            #print(len(frameenc))
+            #self.socket.sendall(frameenc)
+            self.socket.sendto(frameenc, (self.server_ip, 1337))
+            print('Frame sent')
+
 
         current_fps = self.clock.get_fps()
         fps_img = self.font.render(f"FPS: {current_fps:.1f}", True, (0, 100, 0))
