@@ -18,21 +18,27 @@ Pour des raisons matérielles, la croix gère deux modes de couleur :
 
 ## Liste des modules
 
-- Exemple - [example.py](example.py)
+- Exemple - [example.py](src/croix_pharmacie/mains/example.py)
 - Affichage d'une vidéo avec le son - [videoplayer.py](videoplayer.py)
-- Jeu pong imaginé par [le_egar](https://twitter.com/le_egar/status/1517539004627001346), avec 4 joueurs - [pong.py](pong.py)
-- Doom (voir instructions ci-dessous) - [doom.py](doom.py)
-- Simulation de chute de sable - [falling_sand_simulation.py](falling_sand_simulation.py)
-- Simon says - [simon.py](simon.py)
-- Snake - [snake.py](snake.py)
-- Animation d'un cube rotatif - [cube.py](cube.py)
-- Affichage de texte - [textwriter.py](textwriter.py)
-- Effets visuels - [visual_effects.py](visual_effects.py)
-- Spirale hypnotique - [youreundercontrol.py](youreundercontrol.py)
-- Plasma - [plasma.py](plasma.py)
-- Rotozoom - [rotozoom.py](rotozoom.py)
+- Jeu pong imaginé par [le_egar](https://twitter.com/le_egar/status/1517539004627001346), avec 4 joueurs - [pong.py](src/croix_pharmacie/mains/pong.py)
+- Doom (voir instructions ci-dessous) - [doom.py](src/croix_pharmacie/mains/doom.py)
+- Simulation de chute de sable - [falling_sand_simulation.py](src/croix_pharmacie/mains/falling_sand_simulation.py)
+- Simon says - [simon.py](src/croix_pharmacie/mains/simon.py)
+- Snake - [snake.py](src/croix_pharmacie/mains/snake.py)
+- Animation d'un cube rotatif - [cube.py](src/croix_pharmacie/mains/cube.py)
+- Affichage de texte - [textwriter.py](src/croix_pharmacie/mains/textwriter.py)
+- Effets visuels - [visual_effects.py](src/croix_pharmacie/mains/visual_effects.py)
+- Spirale hypnotique - [youreundercontrol.py](src/croix_pharmacie/mains/youreundercontrol.py)
+- Plasma - [plasma.py](src/croix_pharmacie/mains/plasma.py)
+- Rotozoom - [rotozoom.py](src/croix_pharmacie/mains/rotozoom.py)
 
-Pour installer les dépendances Python, exécutez la commande `pip install -r requirements.txt`
+## Installation
+Pour juste l'installer : `pip install git+https://github.com/MathisHammel/CroixPharmacie`
+Si vous voulez faire des modifications `pip install --editable git+https://github.com/MathisHammel/CroixPharmacie`
+
+Pour ajouter des features vous pouvez aussi installer [rye](https://rye.astral.sh/) puis faire:
+* `rye sync`
+* `rye run pong` (si vous voulez lancer le pong par example)
 
 ## Une idée à ajouter ?
 
