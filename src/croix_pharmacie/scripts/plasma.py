@@ -5,7 +5,7 @@
 import sys
 import numpy as np
 import pygame
-from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PharmaScreen
+from croix_pharmacie.pharmacontroller import PharmaScreen
 
 def main():
     size = 48
@@ -26,8 +26,8 @@ def main():
         for i in range(size):
             for j in range(size):
                 pt = np.sin((t+i+j)/10)+np.cos((t+i+j)/10)
-                p0 = np.sin(pt + j /3);
-                p1 = np.cos(pt + i /3);
+                p0 = np.sin(pt + j /3)
+                p1 = np.cos(pt + i /3)
                 matrix[i][j] = ((p0 + p1)+2)/4
 
         screen.set_image(matrix.tolist())

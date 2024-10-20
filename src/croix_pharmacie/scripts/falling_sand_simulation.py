@@ -20,7 +20,7 @@ class Grid:
     self.set(self.pointer[0], self.pointer[1], 1)
 
   def move_pointer(self, x, y):
-    if self.screen.is_drawable(self.pointer[0] + x, self.pointer[1] + y) == False:
+    if self.screen.is_drawable(self.pointer[0] + x, self.pointer[1] + y) is False:
       return
 
     self.set(self.pointer[0], self.pointer[1], self.pointer_prev_value)
@@ -40,7 +40,7 @@ class Grid:
     under_left = (x - 1, y + 1)
     under_right = (x + 1, y + 1)
 
-    if self.screen.is_drawable(*under) == False and self.screen.is_drawable(*under_left) == False and self.screen.is_drawable(*under_right) == False:
+    if self.screen.is_drawable(*under) is False and self.screen.is_drawable(*under_left) is False and self.screen.is_drawable(*under_right) is False:
       return
 
     if self.screen.is_drawable(*under) and self.is_empty(*under):
@@ -63,7 +63,7 @@ class Grid:
     return self.get(x, y) == 0
   
   def set(self, x, y, value):
-    if self.screen.is_drawable(x, y) == False:
+    if self.screen.is_drawable(x, y) is False:
       return
     self.grid[y][x] = value
 

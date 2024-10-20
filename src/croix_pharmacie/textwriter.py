@@ -1,6 +1,5 @@
 import pygame
 
-import sys
 import time
 import json
 
@@ -39,7 +38,8 @@ class Letter:
         """
         # determine if the letter is cutted on the left
         left_cut = xbounds[0] - self.coords[0]
-        if left_cut < 0: left_cut = 0
+        if left_cut < 0:
+            left_cut = 0
 
         for y, line in enumerate(image[self.coords[1]:self.coords[1] + self.height]):
             for x in range(left_cut, self.width):

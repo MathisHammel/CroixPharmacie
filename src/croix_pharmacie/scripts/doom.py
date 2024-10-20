@@ -18,7 +18,6 @@ import sys
 
 import cv2
 import cydoomgeneric as cdg
-import numpy as np
 import pygame
 
 from  croix_pharmacie.pharmacontroller import PharmaScreen

@@ -2,11 +2,10 @@
 #               HZV ROTOZOOM
 #   tixlegeek 2024 - tixlegeek@cyberpunk.company
 #
-import random
 import sys
 import numpy as np
 import pygame
-from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PharmaScreen
+from croix_pharmacie.pharmacontroller import PharmaScreen
 
 hzv = [
     [0,0,0,0,0,0,0,0,0],

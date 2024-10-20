@@ -70,7 +70,8 @@ class Snake:
             self.time = time.time()
 
     def handle_inputs(self, pressed_keys, snake):
-        if self.heading_changed_in_frame: return
+        if self.heading_changed_in_frame:
+            return
 
         if pressed_keys[pygame.K_UP]:
             if snake.heading != Direction.SOUTH:
@@ -101,7 +102,8 @@ class Snake:
         return False
     
     def draw(self):
-        if self.has_lost or self.has_won: return
+        if self.has_lost or self.has_won:
+            return
         for cell in self.tail:
             self.image[cell[1]][cell[0]] = self.SNAKE_BRIGHTNESS
         self.image[self.apple[1]][self.apple[0]] = self.APPLE_BRIGHTNESS

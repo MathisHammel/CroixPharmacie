@@ -1,4 +1,7 @@
-import pygame, sys, time, random
+import pygame
+import sys
+import time
+import random
 from collections import defaultdict
 from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PANEL_SIZE, PharmaScreen
 

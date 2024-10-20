@@ -3,12 +3,13 @@ import pygame
 import random
 import sys
 
+from croix_pharmacie.asset_helper import get_asset_path
+from croix_pharmacie.pharmacontroller import PharmaScreen
+
 PANEL_SIZE = 16
 SCREEN_SIZE = 3 * PANEL_SIZE
 SHAPE_SIZE = 10
 
-from croix_pharmacie.asset_helper import get_asset_path
-from croix_pharmacie.pharmacontroller import PharmaScreen
 
 def draw_square(image, size):
     x = 3
