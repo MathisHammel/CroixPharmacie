@@ -1,9 +1,8 @@
 import random
 import sys
-import time
 import pygame
 
-from pharmacontroller import SCREEN_SIZE, PharmaScreen
+from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PharmaScreen
 
 class Grid:
   def __init__ (self, width, height,screen, pointer_radius=1, pointer_probability=0.5):
@@ -81,7 +80,7 @@ class Grid:
 def get_random_color():
   return round(random.random(), 1)
 
-if __name__ == "__main__":
+def main():
     pygame.init()
     screen = PharmaScreen(True)
 
@@ -116,3 +115,6 @@ if __name__ == "__main__":
         screen.set_image(grid.get_grid())
 
     pygame.quit()
+
+if __name__ == "__main__":
+    main()

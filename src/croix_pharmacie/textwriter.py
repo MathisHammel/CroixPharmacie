@@ -4,10 +4,11 @@ import sys
 import time
 import json
 
-from pharmacontroller import PharmaScreen, SCREEN_SIZE
+from .asset_helper import get_asset_path
+from .pharmacontroller import PharmaScreen, SCREEN_SIZE
 
 # loads the letters
-with open("./letters.json", "r") as f:
+with open(get_asset_path("letters.json"), "r") as f:
     LETTERS = json.load(f)
     f.close()
 

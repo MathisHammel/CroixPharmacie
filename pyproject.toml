@@ -1,0 +1,43 @@
+[project]
+name = "croix_pharmacie"
+version = "1.0.0"
+description = "Ce projet permet de contrôler à distance l'affichage d'une croix de pharmacie. Si vous n'avez pas la chance de posséder une croix de pharmacie chez vous, le code vous permet également de simuler l'affichage localement."
+authors = [
+    { name = "Mathis Hammel" }
+]
+dependencies = [
+	"pygame>=2.5.2",
+	"opencv-python>=4.9",
+	"moviepy>=1.0.3",
+	"matplotlib>=3.7",
+	"pydub>=0.25.1",
+]
+readme = "README.md"
+requires-python = ">= 3.11"
+
+[project.scripts]
+"audio_visualizer" = "croix_pharmacie.scripts.audio_visualizer:main"
+"cube" = "croix_pharmacie.scripts.cube:main"
+"doom" = "croix_pharmacie.scripts.doom:main"
+"example" = "croix_pharmacie.scripts.example:main"
+"falling_sand_simulation" = "croix_pharmacie.scripts.falling_sand_simulation:main"
+"flappyBird" = "croix_pharmacie.scripts.flappyBird:main"
+"plasma" = "croix_pharmacie.scripts.plasma:main"
+"pong" = "croix_pharmacie.scripts.pong:main"
+"rotozoom" = "croix_pharmacie.scripts.rotozoom:main"
+"simon" = "croix_pharmacie.scripts.simon:main"
+"snake" = "croix_pharmacie.scripts.snake:main"
+"tetris" = "croix_pharmacie.scripts.tetris:main"
+"videoplayer" = "croix_pharmacie.scripts.videoplayer:main"
+"visual_effects" = "croix_pharmacie.scripts.visual_effects:main"
+"youreundercontrol" = "croix_pharmacie.scripts.youreundercontrol:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/croix_pharmacie"]

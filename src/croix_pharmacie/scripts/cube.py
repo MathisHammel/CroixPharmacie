@@ -3,7 +3,7 @@ from math import sin
 import numpy as np
 import pygame
 
-from pharmacontroller import PharmaScreen
+from croix_pharmacie.pharmacontroller import PharmaScreen
 
 size = 48
 vertices = (
@@ -96,7 +96,7 @@ def bresenham(matrix, x0, y0, x1, y1):
             y0 += sy
 
 
-if __name__ == "__main__":
+def main():
     pygame.init()
     screen = PharmaScreen()
     matrix = np.zeros((size, size), dtype=int)
@@ -109,3 +109,6 @@ if __name__ == "__main__":
         projected_vertices = project(vertices, angles)
         update_matrix(matrix, projected_vertices, edges)
         screen.set_image(matrix.tolist())
+
+if __name__ == "__main__":
+    main()

@@ -6,9 +6,7 @@ import random
 import sys
 import numpy as np
 import pygame
-from pharmacontroller import SCREEN_SIZE, PharmaScreen
-size = 48
-t=0
+from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PharmaScreen
 
 hzv = [
     [0,0,0,0,0,0,0,0,0],
@@ -21,7 +19,9 @@ hzv = [
     [0,0,0,0,0,0,0,0,0],
 ]
 
-if __name__ == "__main__":
+def main():
+    size = 48
+    t=0
     pygame.init()
     screen = PharmaScreen()
     matrix = np.zeros((size, size), dtype=float)
@@ -42,3 +42,6 @@ if __name__ == "__main__":
                 matrix[i][j] = hzv[int(x)%8][int(y)%9]
 
         screen.set_image(matrix.tolist())
+
+if __name__ == "__main__":
+    main()

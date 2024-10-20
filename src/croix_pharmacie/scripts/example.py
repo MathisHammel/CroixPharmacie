@@ -3,9 +3,9 @@ import sys
 
 import pygame
 
-from pharmacontroller import SCREEN_SIZE, PharmaScreen
+from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PharmaScreen
 
-if __name__ == "__main__":
+def main():
     pygame.init()
     screen = PharmaScreen()
 
@@ -25,3 +25,6 @@ if __name__ == "__main__":
             ] = random.random()
 
         screen.set_image(image)
+
+if __name__ == "__main__":
+    main()

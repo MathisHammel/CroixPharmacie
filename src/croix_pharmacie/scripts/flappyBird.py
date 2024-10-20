@@ -4,7 +4,7 @@ import sys
 import pygame
 import random
 
-from pharmacontroller import SCREEN_SIZE, PharmaScreen
+from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PharmaScreen
 
 
 ######################################################################
