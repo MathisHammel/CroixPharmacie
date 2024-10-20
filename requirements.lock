@@ -15,6 +15,7 @@ charset-normalizer==3.4.0
 colorama==0.4.6
 contourpy==1.3.0
 cycler==0.12.1
+cydoomgeneric @ git+https://github.com/Baduit/cydoomgeneric@b20705b303e74b28985396cc5f06637e53607b16
 decorator==4.4.2
 fonttools==4.54.1
 idna==3.10

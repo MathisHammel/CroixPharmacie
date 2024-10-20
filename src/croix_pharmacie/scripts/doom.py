@@ -20,6 +20,7 @@ import cv2
 import cydoomgeneric as cdg
 import pygame
 
+from croix_pharmacie.asset_helper import get_asset_path
 from  croix_pharmacie.pharmacontroller import PharmaScreen
 
 SCREEN_WIDTH = 640
@@ -91,7 +92,7 @@ def main():
         SCREEN_HEIGHT,
         lambda pixels: draw_frame(screen, pixels, debug_figax),
         get_key)
-    cdg.main()
+    cdg.main(argv=["cydoomgeneric", "-iwad", str(get_asset_path("doom1.wad"))])
 
 
 if __name__ == "__main__":

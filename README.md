@@ -46,14 +46,5 @@ Les pull requests sont les bienvenues sur ce dépôt ! Et si vous envoyez votre 
 
 Pour soumettre une idée si vous n'êtes pas en mesure de coder, n'hésitez pas à créer [une issue GitHub](https://github.com/MathisHammel/CroixPharmacie/issues), ou m'envoyer des propositions en [DM sur Twitter](https://twitter.com/MathisHammel).
 
-## Comment exécuter Doom ?
-
-L'exécution du module Doom est dépendante de cyDoomGeneric, un wrapper de DoomGeneric. L'installation se fait en plusieurs étapes :
-
-```bash
-git clone https://github.com/wojciech-graj/cydoomgeneric
-cd cydoomgeneric/cydoomgeneric
-python setup.py install
-```
-
-Vous pouvez maintenant exécuter doom.py pour le lancer sur la croix de pharmacie ! Utilisez les flèches pour vous déplacer, Ctrl gauche pour tirer, et la barre espace pour ouvrir les portes.
+## Comment jouer à Doom ?
+Utilisez les flèches pour vous déplacer, Ctrl gauche pour tirer, et la barre espace pour ouvrir les portes.
