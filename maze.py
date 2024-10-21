@@ -4,11 +4,11 @@ import threading
 from pharmacontroller import SCREEN_SIZE, PharmaScreen
 from textwriter import String
 
+from dataclasses import dataclass, field
+from typing import List, Tuple
+
 # Constants for the game
 TRAIL_TIME = 5  # Time in seconds before trail disappears
-
-game_started = False
-game_over = False
 
 # Directions (example level input)
 level_directions = [
@@ -32,14 +32,19 @@ DIRECTIONS = {
     "right": (1, 0),
 }
 
+@dataclass
 class Player:
-    def __init__(self, start_x, start_y):
-        self.start_x = start_x
-        self.start_y = start_y
-        self.x = start_x
-        self.y = start_y
-        self.trail = [(self.x, self.y)]  # Start trail with initial position
-        self.trail_directions = []
+    start_x: int
+    start_y: int
+    x: int = field(init=False)
+    y: int = field(init=False)
+    trail: List[Tuple[int, int]] = field(default_factory=list)
+    trail_directions: List[str] = field(default_factory=list)
+
+    def __post_init__(self):
+        self.x = self.start_x
+        self.y = self.start_y
+        self.trail.append((self.x, self.y))
 
     def move(self, direction, maze=None):
         if direction in DIRECTIONS:
@@ -96,7 +101,27 @@ def hide_trail(player):
     global game_started
     game_started = True
 
-def display_message_until_escape(string_object, screen):
+def get_event(player):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            match event.key:
+                case pygame.K_LEFT:
+                    player.move("left")
+                case pygame.K_RIGHT:
+                    player.move("right")
+                case pygame.K_UP:
+                    player.move("up")
+                case pygame.K_DOWN:
+                    player.move("down")
+                case pygame.K_ESCAPE | pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+    return None
+
+def display_message_until_escape(string_object, screen, player):
     """Display the string message until the player presses ESC to exit."""
     image = [[0.0 for c in range(SCREEN_SIZE)] for r in range(SCREEN_SIZE)]
     string_object.image = image
@@ -107,13 +132,7 @@ def display_message_until_escape(string_object, screen):
         string_object.scroll(inverted=False)
         screen.set_image(image)
         
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
+        get_event(player)
 
         pygame.time.Clock().tick(30)
 
@@ -123,6 +142,11 @@ def game_loop():
     start_y = SCREEN_SIZE - 1   # Very bottom of the screen
     player = Player(start_x, start_y)
 
+    global game_started
+    game_started = False
+
+    game_over = False
+
     screen = PharmaScreen(True)
 
     # Start a timer to hide the trail after TRAIL_TIME and reset the player
@@ -131,32 +155,19 @@ def game_loop():
     for direction in level_directions:
         player.move(direction)
 
-    global game_over
-
     running = True
     while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    player.move("left")
-                elif event.key == pygame.K_RIGHT:
-                    player.move("right")
-                elif event.key == pygame.K_UP:
-                    player.move("up")
-                elif event.key == pygame.K_DOWN:
-                    player.move("down")
-
+        get_event(player)
         draw_trail(screen, player, show_trail=True)
         
         if game_started and not game_over:
             string_object, game_over = check_trail(player)
             if game_over:
-                display_message_until_escape(string_object, screen)
+                display_message_until_escape(string_object, screen, player)
 
         pygame.time.Clock().tick(30)
+    pygame.quit()
+    sys.exit()
 
 if __name__ == "__main__":
     game_loop()
