@@ -20,7 +20,7 @@ def is_valid_index(row: int, column: int) -> bool:
         column (int): The column index.
 
     Returns:
-        bool: True if the indices are valid, False otherwise.
+        True if the indices are valid, false otherwise.
     """
     conditions = (
         0 <= row < SCREEN_SIZE,
@@ -35,7 +35,7 @@ def generate_grid() -> Grid:
     Generate a grid without any living cells.
 
     Returns:
-        List[List[int]]: The grid state.
+        The grid state.
     """
     return [[0 for _ in range(SCREEN_SIZE)] for _ in range(SCREEN_SIZE)]
 
@@ -50,7 +50,7 @@ def get_neighbors(grid: Grid, row: int, column: int) -> List[int]:
         column (int): The column of the cell.
 
     Returns:
-        List[int]: The list of neighbors.
+        The list of neighbors.
     """
     neighbors = []
 
@@ -78,7 +78,7 @@ def next_generation(grid: Grid) -> Grid:
     Generate the next generation of the grid.
 
     Returns:
-        List[List[int]]: The next generation of the grid.
+        The next generation of the grid.
     """
     new_grid = generate_grid()
 
