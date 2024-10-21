@@ -55,7 +55,7 @@ class Snake:
             new_head = (self.tail[0][0] + to_add[0], self.tail[0][1] + to_add[1])
 
             # Wall collision
-            if not PharmaScreen.is_drawable(None, new_head[0], new_head[1]) or new_head in self.tail[1:]:
+            if not PharmaScreen.is_drawable(new_head[0], new_head[1]) or new_head in self.tail[1:]:
                 self.has_lost = True
                 return False
 
@@ -94,7 +94,7 @@ class Snake:
             avaiable_cells = []
             for x in range(48):
                 for y in range(48):
-                    if PharmaScreen.is_drawable(None, x, y) and (x, y) not in self.tail : 
+                    if PharmaScreen.is_drawable(x, y) and (x, y) not in self.tail :
                         avaiable_cells.append((x, y))
             self.apple = random.choice(avaiable_cells)
             return True
