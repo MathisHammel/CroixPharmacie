@@ -11,7 +11,7 @@ from pharmacontroller import SCREEN_SIZE, PharmaScreen
 Grid = type(List[List[int]])
 
 
-def is_valid_index(screen: PharmaScreen, row: int, column: int) -> bool:
+def is_valid_index(row: int, column: int) -> bool:
     """
     Check if the given row and column are valid indices.
 
@@ -25,7 +25,7 @@ def is_valid_index(screen: PharmaScreen, row: int, column: int) -> bool:
     conditions = (
         0 <= row < SCREEN_SIZE,
         0 <= column < SCREEN_SIZE,
-        screen.is_drawable(row, column),  # Todo: transform to static method
+        PharmaScreen.is_drawable(row, column),
     )
     return all(conditions)
 
@@ -35,12 +35,12 @@ def generate_grid() -> Grid:
     Generate a grid without any living cells.
 
     Returns:
-        numpy.ndarray: The grid state.
+        List[List[int]]: The grid state.
     """
     return [[0 for _ in range(SCREEN_SIZE)] for _ in range(SCREEN_SIZE)]
 
 
-def get_neighbors(screen: PharmaScreen, grid: Grid, row: int, column: int) -> List[float]:
+def get_neighbors(grid: Grid, row: int, column: int) -> List[int]:
     """
     Get the neighbors of the cell at the given row and column.
 
@@ -65,7 +65,7 @@ def get_neighbors(screen: PharmaScreen, grid: Grid, row: int, column: int) -> Li
         new_column = column + j
 
         # Ignore out of bounds cells
-        if not is_valid_index(screen, new_row, new_column):
+        if not is_valid_index(new_row, new_column):
             continue
 
         neighbors.append(grid[new_row][new_column])
@@ -73,17 +73,17 @@ def get_neighbors(screen: PharmaScreen, grid: Grid, row: int, column: int) -> Li
     return neighbors
 
 
-def next_generation(screen: PharmaScreen, grid: Grid) -> Grid:
+def next_generation(grid: Grid) -> Grid:
     """
     Generate the next generation of the grid.
 
     Returns:
-        numpy.ndarray: The new grid state.
+        List[List[int]]: The next generation of the grid.
     """
     new_grid = generate_grid()
 
     for row, column in itertools.product(range(SCREEN_SIZE), range(SCREEN_SIZE)):
-        neighbors = get_neighbors(screen, grid, row, column)
+        neighbors = get_neighbors(grid, row, column)
         alive_neighbors = sum(neighbors)
         cell = grid[row][column]
 
@@ -115,7 +115,7 @@ if __name__ == "__main__":
                 pygame.quit()
                 sys.exit()
 
-        grid = next_generation(screen, grid)
+        grid = next_generation(grid)
         screen.set_image(grid)
 
         # Leave time to contemplate life

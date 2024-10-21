@@ -39,7 +39,8 @@ class PharmaScreen:
         self.fps = FPS_8COLOR if color_scale else FPS_2COLOR
         self.font = pygame.font.SysFont(None, 24)
 
-    def is_drawable(self, row: int, col: int) -> bool:
+    @staticmethod
+    def is_drawable(row: int, col: int) -> bool:
         """
         Returns whether the given coordinates match an actual LED on the screen.
         """
