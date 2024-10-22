@@ -1,6 +1,9 @@
-import pygame, sys, time, random
+import pygame
+import sys
+import time
+import random
 from collections import defaultdict
-from pharmacontroller import SCREEN_SIZE, PANEL_SIZE, PharmaScreen
+from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PANEL_SIZE, PharmaScreen
 
 """
 TETRIS, pharmacy cross edition
@@ -172,7 +175,7 @@ class Tetris:
 
             final_pix_x = draw_text(
                 image,
-                f'GAME OVER      SCORE: {game.score}      ',
+                f'GAME OVER      SCORE: {self.score}      ',
                 PANEL_SIZE + 3,
                 SCREEN_SIZE - self.game_over_scrolling,
                 letter_scale=2
@@ -319,7 +322,7 @@ class Tetris:
 
         return image
 
-if __name__ == "__main__":
+def main():
     pygame.init()
     screen = PharmaScreen(True)
 
@@ -335,3 +338,6 @@ if __name__ == "__main__":
                 game.handle_keydown(event.key)
 
         screen.set_image(game.step())
+
+if __name__ == "__main__":
+    main()

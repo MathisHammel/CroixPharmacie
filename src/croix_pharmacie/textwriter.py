@@ -1,13 +1,13 @@
 import pygame
 
-import sys
 import time
 import json
 
-from pharmacontroller import PharmaScreen, SCREEN_SIZE
+from .asset_helper import get_asset_path
+from .pharmacontroller import PharmaScreen, SCREEN_SIZE
 
 # loads the letters
-with open("./letters.json", "r") as f:
+with open(get_asset_path("letters.json"), "r") as f:
     LETTERS = json.load(f)
     f.close()
 
@@ -38,7 +38,8 @@ class Letter:
         """
         # determine if the letter is cutted on the left
         left_cut = xbounds[0] - self.coords[0]
-        if left_cut < 0: left_cut = 0
+        if left_cut < 0:
+            left_cut = 0
 
         for y, line in enumerate(image[self.coords[1]:self.coords[1] + self.height]):
             for x in range(left_cut, self.width):

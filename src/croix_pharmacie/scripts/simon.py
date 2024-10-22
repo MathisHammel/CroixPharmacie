@@ -3,11 +3,13 @@ import pygame
 import random
 import sys
 
+from croix_pharmacie.asset_helper import get_asset_path
+from croix_pharmacie.pharmacontroller import PharmaScreen
+
 PANEL_SIZE = 16
 SCREEN_SIZE = 3 * PANEL_SIZE
 SHAPE_SIZE = 10
 
-from pharmacontroller import PharmaScreen
 
 def draw_square(image, size):
     x = 3
@@ -63,10 +65,10 @@ def main():
     add_shape = True
 
     sounds = {
-        'square': pygame.mixer.Sound('simon_sounds/simonSound1.mp3'),
-        'circle': pygame.mixer.Sound('simon_sounds/simonSound2.mp3'),
-        'triangle': pygame.mixer.Sound('simon_sounds/simonSound3.mp3'),
-        'xlogo': pygame.mixer.Sound('simon_sounds/simonSound4.mp3')
+        'square': pygame.mixer.Sound(get_asset_path('simonSound1.mp3', subdirs='simon_sounds')),
+        'circle': pygame.mixer.Sound(get_asset_path('simonSound2.mp3', subdirs='simon_sounds')),
+        'triangle': pygame.mixer.Sound(get_asset_path('simonSound3.mp3', subdirs='simon_sounds')),
+        'xlogo': pygame.mixer.Sound(get_asset_path('simonSound4.mp3', subdirs='simon_sounds')),
     }
 
     key_map = {

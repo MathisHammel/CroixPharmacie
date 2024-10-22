@@ -5,7 +5,7 @@ from abc import abstractmethod, ABC
 import pygame
 from pygame import Rect
 
-from pharmacontroller import PharmaScreen, SCREEN_SIZE
+from croix_pharmacie.pharmacontroller import PharmaScreen, SCREEN_SIZE
 
 HALF_SCREEN_SIZE = SCREEN_SIZE // 2
 TIME_SCALE = 0.002
@@ -141,7 +141,7 @@ class FireEffect(VisualEffect):
                 self.propagate_fire(zone)
 
 
-if __name__ == '__main__':
+def main():
     pygame.init()
     screen = PharmaScreen()
     effects = [SpiralPoint(), RipplePoint(), Radial1Point(), Radial2Point(), RainEffect(), FireEffect()]
@@ -164,3 +164,6 @@ if __name__ == '__main__':
         screen.set_image(effects[effect].screen_image)
 
     pygame.quit()
+
+if __name__ == "__main__":
+    main()

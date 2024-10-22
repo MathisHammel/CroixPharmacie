@@ -9,7 +9,7 @@ from typing import Tuple,List
 
 import pygame
 
-from pharmacontroller import PANEL_SIZE, SCREEN_SIZE, PharmaScreen
+from croix_pharmacie.pharmacontroller import PANEL_SIZE, SCREEN_SIZE, PharmaScreen
 
 PADDLE_SIZE = 6
 PADDLE_MOVE_SPEED = 0.9
@@ -38,12 +38,12 @@ class Paddle:
     def to_segment(self):
         return (
             pygame.Vector2(
-                paddle.c - BALL_RADIUS * int(not paddle.is_vertical),
-                paddle.r - BALL_RADIUS * int(paddle.is_vertical),
+                self.c - BALL_RADIUS * int(not self.is_vertical),
+                self.r - BALL_RADIUS * int(self.is_vertical),
             ),
             pygame.Vector2(
-                paddle.c + (BALL_RADIUS + paddle.size) * int(not paddle.is_vertical),
-                paddle.r + (BALL_RADIUS + paddle.size) * int(paddle.is_vertical),
+                self.c + (BALL_RADIUS + self.size) * int(not self.is_vertical),
+                self.r + (BALL_RADIUS + self.size) * int(self.is_vertical),
             ),
         )  # adding BALL_RADIUS to size when doing collision math to account for the ball's radius
 
@@ -115,7 +115,7 @@ def seg_intersect(A, B, C, D):
     return ccw(A, C, D) != ccw(B, C, D) and ccw(A, B, C) != ccw(A, B, D)
 
 
-if __name__ == "__main__":
+def main():
     pygame.init()
     screen = PharmaScreen(True)
 
@@ -249,3 +249,6 @@ if __name__ == "__main__":
         screen.set_image(image)
 
     pygame.quit()
+
+if __name__ == "__main__":
+    main()

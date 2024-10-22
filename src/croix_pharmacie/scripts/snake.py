@@ -4,8 +4,8 @@ from enum import Enum
 
 import pygame
 
-from pharmacontroller import SCREEN_SIZE, PharmaScreen
-from textwriter import String
+from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PharmaScreen
+from croix_pharmacie.textwriter import String
 
 class Direction(Enum):
     NORTH = 0
@@ -40,8 +40,8 @@ class Snake:
         # Avoid 2 inputs in the same frame
         self.heading_changed_in_frame = False
 
-    def update(self, pressed_keys):
-        self.handle_inputs(pressed_keys)
+    def update(self, pressed_keys, snake):
+        self.handle_inputs(pressed_keys, snake)
 
         if time.time() - self.time >= self.speed:
             if self.heading == Direction.NORTH:
@@ -69,8 +69,9 @@ class Snake:
             self.heading_changed_in_frame = False
             self.time = time.time()
 
-    def handle_inputs(self, pressed_keys):
-        if self.heading_changed_in_frame: return
+    def handle_inputs(self, pressed_keys, snake):
+        if self.heading_changed_in_frame:
+            return
 
         if pressed_keys[pygame.K_UP]:
             if snake.heading != Direction.SOUTH:
@@ -101,7 +102,8 @@ class Snake:
         return False
     
     def draw(self):
-        if self.has_lost or self.has_won: return
+        if self.has_lost or self.has_won:
+            return
         for cell in self.tail:
             self.image[cell[1]][cell[0]] = self.SNAKE_BRIGHTNESS
         self.image[self.apple[1]][self.apple[0]] = self.APPLE_BRIGHTNESS
@@ -111,7 +113,7 @@ def clear(image):
         for i in range(len(line)):
             line[i] = 0 
 
-if __name__ == "__main__":
+def main():
     pygame.init()
     screen = PharmaScreen()
 
@@ -139,7 +141,10 @@ if __name__ == "__main__":
                     line[i] = (1)
             winning_string.scroll(inverted=True)
         else:
-            snake.update(pygame.key.get_pressed())
+            snake.update(pygame.key.get_pressed(), snake)
             snake.draw()
 
         screen.set_image(image)
+
+if __name__ == "__main__":
+    main()

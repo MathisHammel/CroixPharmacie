@@ -3,7 +3,8 @@ import numpy as np
 import pygame
 from pydub import AudioSegment
 from pydub.utils import which
-from pharmacontroller import SCREEN_SIZE, PharmaScreen
+from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PharmaScreen
+from croix_pharmacie.asset_helper import get_asset_path
 
 # Configure pydub to use ffmpeg
 AudioSegment.converter = which("ffmpeg")
@@ -48,13 +49,13 @@ def draw_techno_sign(screen, spectrum):
     screen.set_image(image)
 
 # Main function
-if __name__ == "__main__":
+def main():
     pygame.init()
     screen = PharmaScreen()
 
     pygame.mixer.init()
 
-    file_path = "music.mp3"  # Replace with your audio file path
+    file_path = get_asset_path("music.mp3") # Replace with your audio file path
     pygame.mixer.music.load(file_path)
     pygame.mixer.music.play()
 
@@ -82,3 +83,6 @@ if __name__ == "__main__":
         pygame.display.flip()
 
     pygame.quit()
+
+if __name__ == "__main__":
+    main()

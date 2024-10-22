@@ -3,9 +3,10 @@ import sys
 import cv2
 import pygame
 
-from pharmacontroller import SCREEN_SIZE, PharmaScreen
+from croix_pharmacie.asset_helper import get_asset_path
+from croix_pharmacie.pharmacontroller import SCREEN_SIZE, PharmaScreen
 
-VIDEO_FILE = "videoExample.mp4"
+VIDEO_FILE = f"{get_asset_path('videoExample.mp4')}"
 FORCED_FRAMERATE = None
 INVERT_COLORS = False
 PLAY_AUDIO = True
@@ -36,7 +37,7 @@ def frame_to_image(frame, invert_colors=False):
     return normalized_frame
 
 
-if __name__ == "__main__":
+def main():
     cap = cv2.VideoCapture(VIDEO_FILE)
     if not cap.isOpened():
         print(f"Error: cannot open video file {VIDEO_FILE}")
@@ -46,13 +47,13 @@ if __name__ == "__main__":
         from moviepy.editor import VideoFileClip
 
         vclip = VideoFileClip(VIDEO_FILE)
-        vclip.audio.write_audiofile("temp_audio.mp3")
+        vclip.audio.write_audiofile(get_asset_path("temp_audio.mp3"))
 
     pygame.init()
     screen = PharmaScreen()
 
     if PLAY_AUDIO:
-        pygame.mixer.music.load("temp_audio.mp3")
+        pygame.mixer.music.load(get_asset_path("temp_audio.mp3"))
         pygame.mixer.music.play()
 
     if FORCED_FRAMERATE is not None:
@@ -95,4 +96,7 @@ if __name__ == "__main__":
         image = frame_to_image(frame, invert_colors=INVERT_COLORS)
         screen.set_image(image)
 
-pygame.quit()
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
