@@ -1,8 +1,12 @@
 import itertools
 import json
 from typing import List
+
+import cv2
 import pygame
 import socket
+import numpy as np
+import numpy.typing as npt
 
 PANEL_SIZE = 16  # Size of a single panel on the cross, in pixels
 SCREEN_SIZE = 3 * PANEL_SIZE  # Width and height of the cross, in pixels
@@ -12,6 +16,13 @@ FPS_2COLOR = 60
 FPS_8COLOR = 20
 GREEN_BRIGHTNESS = 180  # Brightness (0-255) of the brightest green
 COLOR_DEPTH = 3  # Number of bits in each shade of green
+
+cross_mask = np.array([
+    [0, 255, 0],
+    [255, 255, 255],
+    [0, 255, 0],
+], dtype=np.uint8)
+cross_mask = cv2.resize(cross_mask, (SCREEN_SIZE, SCREEN_SIZE), interpolation=cv2.INTER_NEAREST)
 
 
 class PharmaScreen:
@@ -45,12 +56,57 @@ class PharmaScreen:
         """
         if not (0 <= row < SCREEN_SIZE and 0 <= col < SCREEN_SIZE):
             return False
+        return int(cross_mask[row, col]) > 0
 
-        panel_coords = (
-            row // PANEL_SIZE,
-            col // PANEL_SIZE,
-        )  # Locate the target on the 3x3 grid of panels
-        return panel_coords in ((0, 1), (1, 0), (1, 1), (1, 2), (2, 1))
+    def set_image_u8(self, img_u8: npt.NDArray):
+        """
+        Sets the image to be displayed.
+
+        The `image` argument should be a 2D numpy array of uint8 representing the pixels.
+        Values range from 0 (off) to 255 (brightest).
+        Note that 4 sections of the image will be ignored as the screen is a cross.
+
+        For float images, see function: set_image
+        """
+        if img_u8.shape != (SCREEN_SIZE, SCREEN_SIZE):
+            raise ValueError(
+                f"Invalid image size (expected {SCREEN_SIZE}x{SCREEN_SIZE}, got {img_u8.shape})"
+            )
+
+        if img_u8.dtype != np.uint8:
+            raise ValueError("Image type must be uint8")
+
+        self.local_screen.fill((0, 0, 0))
+
+
+        quantized_frame = img_u8 // 32
+        if self.server_ip is not None:
+            frameenc = json.dumps(quantized_frame.tolist()).encode()
+            # print(len(frameenc))
+            # self.socket.sendall(frameenc)
+            self.socket.sendto(frameenc, (self.server_ip, 1337))
+            print('Frame sent')
+
+        if self.color_scale:
+            quantized_frame = quantized_frame.astype(float) / 7
+        else:
+            quantized_frame = (quantized_frame // 4).astype(float)
+
+        for r, c in np.argwhere(cross_mask > 0):
+            led_color = (30, 30 + GREEN_BRIGHTNESS * quantized_frame[r, c], 30)
+            center = (PIXEL_SIZE * (c + 0.5), PIXEL_SIZE * (r + 0.5))
+            pygame.draw.circle(
+                self.local_screen,
+                led_color,
+                center,
+                PIXEL_SIZE * PIXEL_RADIUS_RATIO / 2,
+            )
+
+        current_fps = self.clock.get_fps()
+        fps_img = self.font.render(f"FPS: {current_fps:.1f}", True, (0, 100, 0))
+        self.local_screen.blit(fps_img, (0, 0))
+        pygame.display.flip()
+        self.frame_timing = self.clock.tick(self.fps)
 
     def set_image(self, image: List[List[float]]):
         """
@@ -59,42 +115,18 @@ class PharmaScreen:
         The `image` argument should be an array of floats representing the pixels in (row, column) order.
         Values range from 0.0 (off) to 1.0 (brightest).
         Note that 4 sections of the image will be ignored as the screen is a cross.
+
+        For uint8 images, see function: set_image_u8
         """
-        if len(image) != SCREEN_SIZE or any(len(row) != SCREEN_SIZE for row in image):
+        arr = np.array(image, dtype=float)
+
+        if arr.shape != (SCREEN_SIZE, SCREEN_SIZE):
             raise ValueError(
-                f"Invalid image size (expected {SCREEN_SIZE}x{SCREEN_SIZE})"
+                f"Invalid image size (expected {SCREEN_SIZE}x{SCREEN_SIZE}, got {arr.shape})"
             )
 
-        self.local_screen.fill((0, 0, 0))
-        for r, c in itertools.product(range(SCREEN_SIZE), repeat=2):
-            if not 0.0 <= image[r][c] <= 1.0:
-                raise ValueError("Pixel values should be between 0.0 and 1.0")
+        if arr.flatten().min() < 0.0 or 1.0 < arr.flatten().max():
+            raise ValueError("Pixel values must be between 0.0 and 1.0")
 
-            if self.is_drawable(r, c):
-                quantizer = 7 if self.color_scale else 1
-                quantized_color = round(image[r][c] * quantizer) / quantizer
-
-                led_color = (30, 30 + GREEN_BRIGHTNESS * quantized_color, 30)
-                center = (PIXEL_SIZE * (c + 0.5), PIXEL_SIZE * (r + 0.5))
-                pygame.draw.circle(
-                    self.local_screen,
-                    led_color,
-                    center,
-                    PIXEL_SIZE * PIXEL_RADIUS_RATIO / 2,
-                )
-
-        if self.server_ip is not None:
-            # Range 0.0-1.0 to 0-2^N-1
-            quantized_frame = [[round(pix * (2 ** COLOR_DEPTH - 1)) for pix in row] for row in image]
-            frameenc = json.dumps(quantized_frame).encode()
-            #print(len(frameenc))
-            #self.socket.sendall(frameenc)
-            self.socket.sendto(frameenc, (self.server_ip, 1337))
-            print('Frame sent')
-
-
-        current_fps = self.clock.get_fps()
-        fps_img = self.font.render(f"FPS: {current_fps:.1f}", True, (0, 100, 0))
-        self.local_screen.blit(fps_img, (0, 0))
-        pygame.display.flip()
-        self.frame_timing = self.clock.tick(self.fps)
+        im8 = np.round(arr * 255).astype(np.uint8)
+        self.set_image_u8(im8)
