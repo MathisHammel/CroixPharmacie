@@ -49,16 +49,19 @@ def draw_frame(screen, pixels, debug_figax) -> None:
         fig.canvas.draw()
         fig.canvas.flush_events()
 
-    # Resize pixels to a 48x77 array with interpolation
-    pixels = cv2.resize(pixels, (77, 48), interpolation=cv2.INTER_CUBIC)
+    # Flatten rgba to grayscale
+    pixels = cv2.cvtColor(pixels, cv2.COLOR_RGBA2GRAY)
 
-    # Flatten rgba to grayscale and normalize to [0.0, 1.0]
-    pixels = pixels.mean(axis=2) / 255.0
+    # Resize pixels to a 48x77 array with interpolation
+    pixels = cv2.resize(pixels, (77, 48), interpolation=cv2.INTER_AREA)
 
     # Crop to 48x48 centered
     pixels = pixels[:, 14:62]
 
-    screen.set_image(pixels[:48][:48])
+    # auto contrast with histogram equalization
+    pixels = cv2.equalizeHist(pixels)
+
+    screen.set_image_u8(pixels[:48][:48])
 
 def get_key():
     for event in pygame.event.get():
