@@ -2,7 +2,9 @@
 
 Ce projet permet de contrôler à distance l'affichage d'une croix de pharmacie. Si vous n'avez pas la chance de posséder une croix de pharmacie chez vous, le code vous permet également de simuler l'affichage localement.
 
-![Chute de sable sur une croix de pharmacie](Sandfall.gif)
+[![Capture d'écran de la vidéo de Sylvqin](example.png)](https://www.youtube.com/watch?v=ghh-28ln-z4)
+
+Ce projet a notamment servi pour la vidéo de Sylvqin sur les croix de pharmacie, cliquez sur l'image ci-dessus pour la regarder sur YouTube !
 
 ## Comment contribuer ?
 
@@ -16,27 +18,29 @@ Pour des raisons matérielles, la croix gère deux modes de couleur :
 - `PharmaScreen(color_scale=True)` peut afficher jusqu'à 8 nuances de vert, avec un taux de rafraîchissement de 20 FPS. C'est l'option par défaut.
 - `PharmaScreen(color_scale=False)` ne gère que 2 couleurs (noir/vert), mais peut afficher jusqu'à 60 FPS.
 
+![Chute de sable sur une croix de pharmacie](img/Sandfall.gif)
+
 ## Liste des modules
 
 - Exemple - [example.py](example.py)
-- Affichage d'une vidéo avec le son - [videoplayer.py](videoplayer.py)
-- Jeu pong imaginé par [le_egar](https://twitter.com/le_egar/status/1517539004627001346), avec 4 joueurs - [pong.py](pong.py)
-- Doom (voir instructions ci-dessous) - [doom.py](doom.py)
-- Simulation de chute de sable - [falling_sand_simulation.py](falling_sand_simulation.py)
-- Simon says - [simon.py](simon.py)
-- Snake - [snake.py](snake.py)
-- Animation d'un cube rotatif - [cube.py](cube.py)
-- Affichage de texte - [textwriter.py](textwriter.py)
-- Effets visuels - [visual_effects.py](visual_effects.py)
-- Spirale hypnotique - [youreundercontrol.py](youreundercontrol.py)
-- Plasma - [plasma.py](plasma.py)
-- Rotozoom - [rotozoom.py](rotozoom.py)
+- Affichage d'une vidéo avec le son - [videoplayer.py](src/videoplayer.py)
+- Jeu pong imaginé par [le_egar](https://twitter.com/le_egar/status/1517539004627001346), avec 4 joueurs - [pong.py](src/pong.py)
+- Doom (voir instructions ci-dessous) - [doom.py](src/doom.py)
+- Simulation de chute de sable - [falling_sand_simulation.py](src/falling_sand_simulation.py)
+- Simon says - [simon.py](src/simon.py)
+- Snake - [snake.py](src/snake.py)
+- Animation d'un cube rotatif - [cube.py](src/cube.py)
+- Affichage de texte - [textwriter.py](src/textwriter.py)
+- Effets visuels - [visual_effects.py](src/visual_effects.py)
+- Spirale hypnotique - [youreundercontrol.py](src/youreundercontrol.py)
+- Plasma - [plasma.py](src/plasma.py)
+- Rotozoom - [rotozoom.py](src/rotozoom.py)
 
 Pour installer les dépendances Python, exécutez la commande `pip install -r requirements.txt`
 
 ## Une idée à ajouter ?
 
-Les pull requests sont les bienvenues sur ce dépôt ! Et si vous envoyez votre code d'ici la fin du mois (juin 2024), vous aurez potentiellement la chance de le voir être exécuté sur une vraie croix de pharmacie 😉
+Les pull requests sont les bienvenues sur ce dépôt ! Les contributions ajoutées avant juin 2024 sont apparues sur la [vidéo de Sylvqin](https://www.youtube.com/watch?v=ghh-28ln-z4) sur le sujet 😉
 
 Pour soumettre une idée si vous n'êtes pas en mesure de coder, n'hésitez pas à créer [une issue GitHub](https://github.com/MathisHammel/CroixPharmacie/issues), ou m'envoyer des propositions en [DM sur Twitter](https://twitter.com/MathisHammel).
 
